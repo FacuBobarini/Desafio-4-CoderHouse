@@ -1,9 +1,14 @@
 const socket = io();
 socket.on("products", (data) => {
+  let prodCont = document.getElementById("prodCont");
+  let attribute = prodCont.getAttribute("class");
+  prodCont.innerHTML = "";
+
   data.forEach((element) => {
     const allProducts = document.createElement("ul");
     allProducts.className = "list-group";
     allProducts.id = `producto-${element.id}`;
+
     allProducts.innerHTML = `
           <li class="list-group-item">Title: ${element.title}</li>
           <li class="list-group-item">Description: ${element.description}</li>
@@ -13,21 +18,22 @@ socket.on("products", (data) => {
           <li class="list-group-item">Stock: ${element.stock}</li>
           <li class="list-group-item">Thumbnails: ${element.thumbnails}</li>
         `;
+    if (attribute === "prodCont") {
+      const deleteButton = document.createElement("button");
+      deleteButton.className = "btn btn-primary mb-2";
+      deleteButton.textContent = "Delete";
 
-    const deleteButton = document.createElement("button");
-    deleteButton.className = "btn btn-primary mb-2";
-    deleteButton.textContent = "Eliminar";
-    deleteButton.addEventListener("click", () => {
-      deleteProducto(element.id);
-    });
-    allProducts.appendChild(deleteButton);
+      deleteButton.addEventListener("click", () => {
+        socket.emit("deleteProduct", element.id);
+      });
+      allProducts.appendChild(deleteButton);
+    } else {
+      const hr = document.createElement("HR");
+      allProducts.appendChild(hr);
+    }
 
     document.getElementById("prodCont").appendChild(allProducts);
   });
-
-  function deleteProducto(id) {
-    socket.emit("deleteProduct", id);
-  }
 });
 
 const form = document.getElementById("addProduct");

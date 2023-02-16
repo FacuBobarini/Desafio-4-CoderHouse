@@ -12,7 +12,6 @@ body{
 
 
 .prodCont{
-    display: flex;
     justify-content: center;
     align-items: center;
     width: 400px;

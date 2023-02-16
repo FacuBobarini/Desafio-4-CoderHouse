@@ -13,22 +13,23 @@ const server = app.listen(PORT);
 const io = new Server(server);
 
 app.engine("handlebars", engine()); //Config de hbs
-app.set("view engine", "handlebars"); //Defino mis vistas
-app.set("views", path.resolve(__dirname, "./views")); //`${__dirname}/views`
+app.set("view engine", "handlebars");
+app.set("views", path.resolve(__dirname, "./views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 io.on("connection", async (socket) => {
   socket.emit("products", (products = await newProduct.getProducts()));
+
   socket.on("deleteProduct", async (id) => {
     products = await newProduct.deleteProductById(id);
-    //io.sockets.emit("products", (products = await newProduct.getProducts()));
+    io.sockets.emit("products", (products = await newProduct.getProducts()));
   });
 
   socket.on("addProducts", async (product) => {
     products = await newProduct.addProduct(product);
-    //io.sockets.emit("products", (products = await newProduct.getProducts()));
+    io.sockets.emit("products", (products = await newProduct.getProducts()));
   });
 });
 
