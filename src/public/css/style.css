@@ -1,0 +1,19 @@
+body{
+    background-color: #f6f6f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleCont{
+    font-size: 30px;
+    
+}
+
+
+.prodCont{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+}
